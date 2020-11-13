@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.EditProfileActivity">
+
+    <TextView
+        android:id="@+id/text_editprofile"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="200dp"
+        android:layout_marginRight="200dp"
+        android:fontFamily="sans-serif-condensed"
+        android:hint="@string/text_editprofile"
+        android:textColorHint="@color/main_col"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_goBack" />
+
+    <EditText
+        android:id="@+id/intext_name"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:cursorVisible="true"
+        android:inputType="textPersonName|text"
+        android:textColor="@color/main_col"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textinfo_name" />
+
+    <EditText
+        android:id="@+id/intext_age"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:inputType="number"
+        android:textColor="@color/main_col"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textinfo_age" />
+
+    <RadioGroup
+        android:id="@+id/radgroup_gender"
+        android:layout_width="143dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="212dp"
+        android:layout_marginRight="212dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/intext_age">
+
+        <RadioButton
+            android:id="@+id/radbutton_male"
+            style="@style/Widget.AppCompat.CompoundButton.RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:hint="@string/radio_male"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:textColorHint="@color/main_col"
+            app:buttonTint="@color/main_col" />
+
+        <RadioButton
+            android:id="@+id/radbutt_female"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:hint="@string/radio_female"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:textColorHint="@color/main_col"
+            app:buttonTint="@color/main_col" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/intext_currweight"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:inputType="numberSigned|numberDecimal"
+        android:textColor="@color/main_col"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textinfo_currWeight" />
+
+    <EditText
+        android:id="@+id/intext_goalweight"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:inputType="numberSigned|numberDecimal"
+        android:textColor="@color/main_col"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <Button
+        android:id="@+id/button_save"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="82dp"
+        android:layout_marginLeft="82dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="82dp"
+        android:layout_marginRight="82dp"
+        android:hint="@string/button_save"
+        android:onClick="save"
+        android:textColorHint="@color/white"
+        app:backgroundTint="@color/main_col"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/intext_goalweight" />
+
+    <Button
+        android:id="@+id/button_goBack"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="105dp"
+        android:layout_marginEnd="330dp"
+        android:layout_marginRight="330dp"
+        android:hint="@string/button_goBack"
+        android:onClick="mainMenu"
+        android:textColorHint="@color/main_col"
+        android:textSize="14sp"
+        app:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textinfo_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="@string/textinfo_name"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/intext_name"
+        app:layout_constraintTop_toBottomOf="@+id/text_editprofile" />
+
+    <TextView
+        android:id="@+id/textinfo_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/textinfo_age"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/intext_age"
+        app:layout_constraintTop_toBottomOf="@+id/intext_name" />
+
+    <TextView
+        android:id="@+id/textinfo_currWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="@string/textinfo_currweight"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/intext_currweight"
+        app:layout_constraintTop_toBottomOf="@+id/radgroup_gender" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/textinfo_goalweight"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/intext_goalweight"
+        app:layout_constraintTop_toBottomOf="@+id/intext_currweight" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

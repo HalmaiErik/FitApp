@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">FitApp</string>
+    <string name="button_workout">WORK OUT</string>
+    <string name="button_run">RUN</string>
+    <string name="button_editprofile">EDIT PROFILE</string>
+    <string name="text_mainmenu">Main menu</string>
+    <string name="text_editprofile">Edit Profile</string>
+    <string name="textinfo_name">Name</string>
+    <string name="textinfo_age">Age</string>
+    <string name="radio_male">Male</string>
+    <string name="radio_female">Female</string>
+    <string name="textinfo_currweight">Current weight</string>
+    <string name="textinfo_goalweight">Goal weight</string>
+    <string name="button_save">Save</string>
+    <string name="button_goBack">&lt;</string>
+    <string name="button_createEx">NEW EXERCISE</string>
+    <string name="button_edit">EDIT</string>
+</resources>
