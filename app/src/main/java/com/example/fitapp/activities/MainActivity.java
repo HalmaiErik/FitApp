@@ -1,4 +1,4 @@
-package com.example.fitapp.view;
+package com.example.fitapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,15 +16,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    /** Called when the user taps the Edit Profile button */
+    /** Called when the user taps the Edit Profile button_newEx */
     public void editProfile(View view) {
         Intent intent = new Intent(this, EditProfileActivity.class);
         startActivity(intent);
     }
 
-    /** Called when the user taps the Work out button */
+    /** Called when the user taps the Work out button_newEx */
     public void workOut(View view) {
         Intent intent = new Intent(this, WorkoutActivity.class);
+        startActivity(intent);
+    }
+
+    public void runPage(View view) {
+        Intent intent = new Intent(this, RunActivity.class);
         startActivity(intent);
     }
 }

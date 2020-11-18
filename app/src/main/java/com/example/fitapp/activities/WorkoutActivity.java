@@ -1,4 +1,4 @@
-package com.example.fitapp.view;
+package com.example.fitapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 

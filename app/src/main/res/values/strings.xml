@@ -15,4 +15,8 @@
     <string name="button_goBack">&lt;</string>
     <string name="button_createEx">NEW EXERCISE</string>
     <string name="button_edit">EDIT</string>
+    <string name="button_delete">DELETE</string>
+    <string name="title_activity_run">Map</string>
+    <string name="button_startRun">START RUN</string>
+    <string name="button_stopRun">STOP RUN</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.fitapp.view;
+package com.example.fitapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,7 +23,7 @@ public class EditProfileActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /** Called when the user taps the Save button */
+    /** Called when the user taps the Save button. */
     public void save (View view) {
         //TODO: Database save
         mainMenu(view);
