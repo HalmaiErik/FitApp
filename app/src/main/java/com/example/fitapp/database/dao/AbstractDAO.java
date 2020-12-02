@@ -11,10 +11,8 @@ public abstract class AbstractDAO {
         this.db = db;
     }
 
-    public boolean insert(String tableName, ContentValues values) {
-        long result = db.insert(tableName, null, values);
-
-        return result != -1;
+    public long insert(String tableName, ContentValues values) {
+        return db.insert(tableName, null, values);
     }
 
     public int delete(String tableName, String selection, String[] selectionArgs) {

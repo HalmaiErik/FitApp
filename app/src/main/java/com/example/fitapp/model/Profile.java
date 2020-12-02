@@ -27,8 +27,8 @@ public class Profile {
         return age;
     }
 
-    public Gender getGender() {
-        return gender;
+    public String getGender() {
+        return String.valueOf(gender);
     }
 
     public float getCurrWeight() {

@@ -17,4 +17,20 @@ public class Exercise {
     public String toString() {
         return name + " " + sets + " sets of " + reps + " reps";
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getSets() {
+        return sets;
+    }
+
+    public int getReps() {
+        return reps;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
 }
