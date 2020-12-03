@@ -11,10 +11,15 @@ public class Profile {
     private float currWeight;
     private float goalWeight;
 
-    public Profile(String name, int age, Gender gender, float currWeight, float goalWeight) {
+    public Profile(String name, int age, String gender, float currWeight, float goalWeight) {
         this.name = name;
         this.age = age;
-        this.gender = gender;
+        if (gender.equals("Male")) {
+            this.gender = Gender.MALE;
+        }
+        else {
+            this.gender = Gender.FEMALE;
+        }
         this.currWeight = currWeight;
         this.goalWeight = goalWeight;
     }

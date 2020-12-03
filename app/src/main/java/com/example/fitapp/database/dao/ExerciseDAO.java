@@ -20,17 +20,56 @@ public class ExerciseDAO extends AbstractDAO implements IExerciseSchema {
         contentValues.put(COL_SETS, exercise.getSets());
         contentValues.put(COL_REPS, exercise.getReps());
         contentValues.put(COL_WEIGHT, exercise.getWeight());
-        contentValues.put(COL_GOAL_WEIGHT, profile.getGoalWeight());
+        contentValues.put(COL_FK_PROFILE, exercise.getFkProfile());
 
         return contentValues;
     }
 
     public boolean addExercise(Exercise exercise) {
+        ContentValues values = createContentValues(exercise);
+        return super.insert(TABLE_EXERCISE, values) > 0;
+    }
+
+    public boolean editExercise(Exercise exercise) {
+
+    }
+
+    public Cursor getExerciseID(String exerciseName) {
 
     }
 
     @Override
-    protected <T> T cursorToEntity(Cursor cursor) {
-        return null;
+    protected Exercise cursorToEntity(Cursor cursor) {
+        String name = "";
+        int sets = -1;
+        int reps = -1;
+        float weight = -1;
+        int fkProfile = -1;
+
+        if (cursor != null) {
+            if (cursor.getColumnIndex(COL_ENAME) != -1) {
+                int nameIndex = cursor.getColumnIndexOrThrow(COL_ENAME);
+                name = cursor.getString(nameIndex);
+            }
+            if (cursor.getColumnIndex(COL_SETS) != -1) {
+                int setsIndex = cursor.getColumnIndexOrThrow(COL_SETS);
+                sets = cursor.getInt(setsIndex);
+            }
+            if (cursor.getColumnIndex(COL_REPS) != -1) {
+                int repsIndex = cursor.getColumnIndexOrThrow(COL_REPS);
+                reps = cursor.getInt(repsIndex);
+            }
+            if (cursor.getColumnIndex(COL_WEIGHT) != -1) {
+                int weightIndex = cursor.getColumnIndexOrThrow(COL_WEIGHT);
+                weight = cursor.getFloat(weightIndex);
+            }
+            if (cursor.getColumnIndex(COL_FK_PROFILE) != -1) {
+                int fkProfileIndex = cursor.getColumnIndexOrThrow(COL_FK_PROFILE);
+                fkProfile = cursor.getInt(fkProfileIndex);
+            }
+            Exercise exercise = new Exercise(name, sets, reps, weight, fkProfile);
+            return exercise;
+        }
+        else return null;
     }
 }

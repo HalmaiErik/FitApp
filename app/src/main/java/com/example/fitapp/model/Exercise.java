@@ -5,12 +5,14 @@ public class Exercise {
     private int sets;
     private int reps;
     private float weight;
+    private int fkProfile;
 
-    public Exercise (String name, int sets, int reps, float weight) {
+    public Exercise (String name, int sets, int reps, float weight, int fkProfile) {
         this.name = name;
         this.sets = sets;
         this.reps = reps;
         this.weight = weight;
+        this.fkProfile = fkProfile;
     }
 
     @Override
@@ -32,5 +34,9 @@ public class Exercise {
 
     public float getWeight() {
         return weight;
+    }
+
+    public int getFkProfile() {
+        return fkProfile;
     }
 }
