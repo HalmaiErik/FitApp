@@ -31,12 +31,10 @@ public class ExerciseDAO extends AbstractDAO implements IExerciseSchema {
     public boolean editExercise(Exercise oldExercise, Exercise newExercise) {
         Cursor cursorId = getExerciseID(oldExercise);
         String[] data = cursorToData(cursorId);
-        int id = -1;
         if (data != null) {
             if (!data[0].equals("")) {
-                id = Integer.parseInt(data[0]);
                 ContentValues values = createContentValues(newExercise);
-                return super.update(TABLE_EXERCISE, values, COL_ID, new String[] {String.valueOf(id)}) > 0;
+                return super.update(TABLE_EXERCISE, values, COL_ID, new String[] {data[0]}) > 0;
             }
         }
         return false;
@@ -45,19 +43,17 @@ public class ExerciseDAO extends AbstractDAO implements IExerciseSchema {
     public boolean deleteExercise(Exercise exercise) {
         Cursor cursorId = getExerciseID(exercise);
         String[] data = cursorToData(cursorId);
-        int id = -1;
         if (data != null) {
             if (!data[0].equals("")) {
-                id = Integer.parseInt(data[0]);
-                return super.delete(TABLE_EXERCISE, COL_ID, new String[] {String.valueOf(id)}) > 0;
+                return super.delete(TABLE_EXERCISE, COL_ID, new String[] {data[0]}) > 0;
             }
         }
         return false;
     }
 
     public Cursor getExerciseID(Exercise exercise) {
-        String selection = COL_ENAME + "=? AND " + COL_REPS + "=? AND " + COL_SETS + "=? AND" +
-                COL_WEIGHT + "=? AND " + COL_FK_PROFILE + "=?";
+        String selection = COL_ENAME + " =? AND " + COL_REPS + " =? AND " + COL_SETS + " =? AND" +
+                COL_WEIGHT + " =? AND " + COL_FK_PROFILE + " =?";
         String[] selectionArgs = new String[] {exercise.getName(), String.valueOf(exercise.getSets()),
                 String.valueOf(exercise.getReps()), String.valueOf(exercise.getWeight()),
                 String.valueOf(exercise.getFkProfile())};

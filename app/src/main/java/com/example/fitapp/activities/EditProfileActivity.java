@@ -29,8 +29,7 @@ public class EditProfileActivity extends AppCompatActivity {
         //TODO: Database save
         mainMenu(view);
     }
-
-
+    
     /**
      * Customizable toast
      * @param message

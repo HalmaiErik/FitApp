@@ -1,22 +1,24 @@
 package com.example.fitapp.database;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import com.example.fitapp.database.dao.ExerciseDAO;
+import com.example.fitapp.database.dao.ProfileDAO;
+import com.example.fitapp.database.dao.RunDAO;
+import com.example.fitapp.database.schemas.IExerciseSchema;
+import com.example.fitapp.database.schemas.IProfileSchema;
+import com.example.fitapp.database.schemas.IRunSchema;
+import com.example.fitapp.model.Exercise;
 import com.example.fitapp.model.Profile;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "fitapp_database";
-
-    private static final String TABLE_RUN = "run";
-
-    // Columns of Run table
-    private static final String COL_DISTANCE = "distance";
-    private static final String COL_PACE = "pace";
-    private static final String COL_DATE = "date";
-    private static final String COL_TIME = "time";
+    private static ProfileDAO profileDAO;
+    private static ExerciseDAO exerciseDAO;
+    private static RunDAO runDAO;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -24,29 +26,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(IProfileSchema.CREATE_TABLE);
+        db.execSQL(IExerciseSchema.CREATE_TABLE_EXERCISE);
+        db.execSQL(IRunSchema.CREATE_TABLE_RUN);
 
-        String tableRun = "CREATE TABLE " + TABLE_RUN +
-                "(id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL_DATE + " TEXT, " +
-                COL_TIME + " TEXT, " +
-                COL_DISTANCE + " FLOAT, " +
-                COL_PACE+ " FLOAT, " +
-                "FOREIGN KEY (" + COL_FK_PROFILE +") REFERENCES " + TABLE_PROFILE + " (" + COL_PID + "))";
-
-        db.execSQL(tableProfile);
-        db.execSQL(tableExercise);
-        db.execSQL(tableRun);
+        profileDAO = new ProfileDAO(db);
+        exerciseDAO = new ExerciseDAO(db);
+        runDAO = new RunDAO(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        Log.w(DATABASE_NAME, "Upgrading database from version "
+                + oldVersion + " to "
+                + newVersion + " which destroys all old data");
+        db.execSQL("DROP TABLE IF EXISTS " + IProfileSchema.TABLE_PROFILE);
+        db.execSQL("DROP TABLE IF EXISTS " + IExerciseSchema.TABLE_EXERCISE);
+        db.execSQL("DROP TABLE IF EXISTS " + IRunSchema.TABLE_RUN);
+        onCreate(db);
     }
 
     public boolean addProfile(Profile profile) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_PNAME, profile.getName(), )
+        Log.d(DATABASE_NAME, "addProfile: " + profile.toString() + " to " + IProfileSchema.TABLE_PROFILE);
+        return profileDAO.addProfile(profile);
     }
 
+    public boolean editProfile(Profile oldProfile, Profile newProfile) {
+        Log.d(DATABASE_NAME, "editProfile: " + oldProfile.toString() + " to " + newProfile.toString());
+        return profileDAO.editProfile(oldProfile, newProfile);
+    }
+
+    public boolean addExercise(Exercise exercise) {
+        Log.d(DATABASE_NAME, "addExercise: " + exercise.toString() + " to " + IExerciseSchema.TABLE_EXERCISE);
+        return exerciseDAO.addExercise(exercise);
+    }
+
+    public boolean editExercise(Exercise oldExercise, Exercise newExercise) {
+        Log.d(DATABASE_NAME, "editExercise: " + oldExercise.toString() + " to " + newExercise.toString());
+        return exerciseDAO.editExercise(oldExercise, newExercise);
+    }
 }

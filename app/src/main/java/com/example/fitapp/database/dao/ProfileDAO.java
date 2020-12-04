@@ -28,9 +28,26 @@ public class ProfileDAO extends AbstractDAO implements IProfileSchema {
         return super.insert(TABLE_PROFILE, values) > 0;
     }
 
-    public boolean editProfile(Profile profile) {
-        ContentValues values = createContentValues(profile);
-        return super.update(TABLE_PROFILE, values, COL_PNAME, new String[] {profile.getName()}) > 0;
+    public boolean editProfile(Profile oldProfile, Profile newProfile) {
+        Cursor idCursor = getProfileID(oldProfile);
+        String[] data = cursorToData(idCursor);
+        if (data != null) {
+            if (!data[0].equals("")) {
+                ContentValues contentValues = createContentValues(newProfile);
+                return super.update(TABLE_PROFILE, contentValues, COL_PID, new String[] {data[0]}) > 0;
+            }
+        }
+        return false;
+    }
+
+    public Cursor getProfileID(Profile profile) {
+        String selection = COL_PNAME + " =? AND " + COL_AGE + " =? AND " + COL_GENDER + " =? AND " +
+                COL_CURRENT_WEIGHT + " =? AND " + COL_GOAL_WEIGHT + " =?";
+        String[] selectionArgs = new String[] {profile.getName(), String.valueOf(profile.getAge()),
+                profile.getGender(), String.valueOf(profile.getCurrWeight()),
+                String.valueOf(profile.getGoalWeight())};
+        return super.db.query(TABLE_PROFILE, new String[] {COL_PID}, selection, selectionArgs,
+                null, null, null);
     }
 
     @Override
@@ -105,10 +122,5 @@ public class ProfileDAO extends AbstractDAO implements IProfileSchema {
             return new String[] {id, name, age, gender, currWeight, goalWeight};
         }
         else return null;
-    }
-
-    public Cursor getProfileID(String name) {
-        return super.db.query(TABLE_PROFILE, new String[] {COL_PID}, COL_PNAME, new String[] {name},
-                null, null, null);
     }
 }

@@ -43,4 +43,15 @@ public class Profile {
     public float getGoalWeight() {
         return goalWeight;
     }
+
+    @Override
+    public String toString() {
+        return "Profile{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", gender=" + gender +
+                ", currWeight=" + currWeight +
+                ", goalWeight=" + goalWeight +
+                '}';
+    }
 }

@@ -17,7 +17,7 @@ public class Exercise {
 
     @Override
     public String toString() {
-        return name + " " + sets + " sets of " + reps + " reps";
+        return name + " " + sets + " sets of " + reps + " reps - " + weight + " kg";
     }
 
     public String getName() {
