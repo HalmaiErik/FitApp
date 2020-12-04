@@ -8,8 +8,6 @@ import com.example.fitapp.database.schemas.IProfileSchema;
 import com.example.fitapp.model.Profile;
 
 public class ProfileDAO extends AbstractDAO implements IProfileSchema {
-    private Cursor cursor;
-
     public ProfileDAO(SQLiteDatabase db) {
         super(db);
     }
@@ -66,6 +64,45 @@ public class ProfileDAO extends AbstractDAO implements IProfileSchema {
             }
             Profile profile = new Profile(name, age, gender, currWeight, goalWeight);
             return profile;
+        }
+        else return null;
+    }
+
+    @Override
+    protected String[] cursorToData(Cursor cursor) {
+        String id = "";
+        String name = "";
+        String age = "";
+        String gender = "";
+        String currWeight = "";
+        String goalWeight = "";
+
+        if (cursor != null) {
+            if (cursor.getColumnIndex(COL_PID) != -1) {
+                int idIndex = cursor.getColumnIndexOrThrow(COL_PID);
+                id = String.valueOf(cursor.getInt(idIndex));
+            }
+            if (cursor.getColumnIndex(COL_PNAME) != -1) {
+                int nameIndex = cursor.getColumnIndexOrThrow(COL_PNAME);
+                name = cursor.getString(nameIndex);
+            }
+            if (cursor.getColumnIndex(COL_AGE) != -1) {
+                int ageIndex = cursor.getColumnIndexOrThrow(COL_AGE);
+                age = String.valueOf(cursor.getInt(ageIndex));
+            }
+            if (cursor.getColumnIndex(COL_GENDER) != -1) {
+                int genderIndex = cursor.getColumnIndexOrThrow(COL_GENDER);
+                gender = cursor.getString(genderIndex);
+            }
+            if (cursor.getColumnIndex(COL_CURRENT_WEIGHT) != -1) {
+                int currWeightIndex = cursor.getColumnIndexOrThrow(COL_CURRENT_WEIGHT);
+                currWeight = String.valueOf(cursor.getFloat(currWeightIndex));
+            }
+            if (cursor.getColumnIndex(COL_GOAL_WEIGHT) != -1) {
+                int goalWeightIndex = cursor.getColumnIndexOrThrow(COL_GOAL_WEIGHT);
+                goalWeight = String.valueOf(cursor.getFloat(goalWeightIndex));
+            }
+            return new String[] {id, name, age, gender, currWeight, goalWeight};
         }
         else return null;
     }
