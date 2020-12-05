@@ -65,4 +65,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d(DATABASE_NAME, "editExercise: " + oldExercise.toString() + " to " + newExercise.toString());
         return exerciseDAO.editExercise(oldExercise, newExercise);
     }
+
+    public boolean deleteExercise(Exercise exercise) {
+        Log.d(DATABASE_NAME, "deleteExercise: " + exercise.toString() + " from " + IExerciseSchema.TABLE_EXERCISE);
+        return exerciseDAO.deleteExercise(exercise);
+    }
 }
