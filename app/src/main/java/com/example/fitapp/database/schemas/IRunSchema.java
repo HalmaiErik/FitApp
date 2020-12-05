@@ -18,8 +18,10 @@ public interface IRunSchema {
             COL_DATE + " TEXT, " +
             COL_TIME + " TEXT, " +
             COL_DISTANCE + " FLOAT, " +
-            COL_PACE+ " FLOAT, " +
-            "FOREIGN KEY (" + COL_FK_PROFILE +") REFERENCES " + TABLE_PROFILE + " (" + COL_PROFILE_ID + "))";
+            COL_PACE + " FLOAT, " +
+            COL_FK_PROFILE + " INTEGER, " +
+            "FOREIGN KEY (" + COL_FK_PROFILE + ") REFERENCES " +
+            TABLE_PROFILE + " (" + COL_PROFILE_ID + ") ON UPDATE CASCADE ON DELETE CASCADE)";
 
     String[] RUN_COLS = new String [] {COL_ID, COL_DISTANCE, COL_PACE, COL_DATE, COL_TIME,
             COL_FK_PROFILE};

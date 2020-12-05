@@ -13,13 +13,15 @@ public interface IExerciseSchema {
     String COL_WEIGHT = "weight";
     String COL_FK_PROFILE = "idprofile";
 
-    String CREATE_TABLE_EXERCISE = "CREATE TABLE " + TABLE_EXERCISE +
-            "(" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    String CREATE_TABLE_EXERCISE = "CREATE TABLE IF NOT EXISTS " + TABLE_EXERCISE +
+            "( " + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COL_ENAME + " TEXT, " +
             COL_SETS + " INTEGER, " +
             COL_REPS + " INTEGER, " +
             COL_WEIGHT + " FLOAT, " +
-            "FOREIGN KEY (" + COL_FK_PROFILE +") REFERENCES " + TABLE_PROFILE + " (" + COL_PROFILE_ID + "))";
+            COL_FK_PROFILE + " INTEGER, " +
+            "FOREIGN KEY (" + COL_FK_PROFILE + ") REFERENCES " +
+            TABLE_PROFILE + " (" + COL_PROFILE_ID + ") ON UPDATE CASCADE ON DELETE CASCADE )";
 
     String[] EXERCISE_COLS = new String [] {COL_ID, COL_ENAME, COL_SETS, COL_REPS, COL_WEIGHT,
             COL_FK_PROFILE};

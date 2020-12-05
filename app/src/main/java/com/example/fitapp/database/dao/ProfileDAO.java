@@ -2,7 +2,9 @@ package com.example.fitapp.database.dao;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.fitapp.database.schemas.IProfileSchema;
 import com.example.fitapp.model.Profile;
@@ -30,12 +32,20 @@ public class ProfileDAO extends AbstractDAO implements IProfileSchema {
 
     public boolean editProfile(Profile oldProfile, Profile newProfile) {
         Cursor idCursor = getProfileID(oldProfile);
-        String[] data = cursorToData(idCursor);
-        if (data != null) {
-            if (!data[0].equals("")) {
-                ContentValues contentValues = createContentValues(newProfile);
-                return super.update(TABLE_PROFILE, contentValues, COL_PID, new String[] {data[0]}) > 0;
+        String id = "";
+
+        if (idCursor != null) {
+            idCursor.moveToFirst();
+            if (idCursor.getColumnIndex(COL_PID) != -1) {
+                int idIndex = idCursor.getColumnIndexOrThrow(COL_PID);
+                id = String.valueOf(idCursor.getInt(idIndex));
             }
+        }
+
+        Log.d("editProfile", "id: " + id);
+        if (!id.equals("")) {
+            ContentValues contentValues = createContentValues(newProfile);
+            return super.update(TABLE_PROFILE, contentValues, COL_PID + " = ?", new String[] {id}) > 0;
         }
         return false;
     }
@@ -50,6 +60,17 @@ public class ProfileDAO extends AbstractDAO implements IProfileSchema {
                 null, null, null);
     }
 
+    public Profile getLastProfile() {
+        Cursor cursor = super.db.query(TABLE_PROFILE, null, null, null,
+                null, null, COL_PID + " DESC", "1");
+        return cursorToEntity(cursor);
+    }
+
+    public boolean isTableEmpty() {
+        long rowNumber = DatabaseUtils.queryNumEntries(db, TABLE_PROFILE);
+        return rowNumber == 0;
+    }
+
     @Override
     protected Profile cursorToEntity(Cursor cursor) {
         String name = "";
@@ -59,28 +80,38 @@ public class ProfileDAO extends AbstractDAO implements IProfileSchema {
         float goalWeight = -1;
 
         if (cursor != null) {
+            cursor.moveToFirst();
             if (cursor.getColumnIndex(COL_PNAME) != -1) {
                 int nameIndex = cursor.getColumnIndexOrThrow(COL_PNAME);
                 name = cursor.getString(nameIndex);
             }
+            else return null;
+
             if (cursor.getColumnIndex(COL_AGE) != -1) {
                 int ageIndex = cursor.getColumnIndexOrThrow(COL_AGE);
                 age = cursor.getInt(ageIndex);
             }
+            else return null;
+
             if (cursor.getColumnIndex(COL_GENDER) != -1) {
                 int genderIndex = cursor.getColumnIndexOrThrow(COL_GENDER);
                 gender = cursor.getString(genderIndex);
             }
+            else return null;
+
             if (cursor.getColumnIndex(COL_CURRENT_WEIGHT) != -1) {
                 int currWeightIndex = cursor.getColumnIndexOrThrow(COL_CURRENT_WEIGHT);
                 currWeight = cursor.getFloat(currWeightIndex);
             }
+            else return null;
+
             if (cursor.getColumnIndex(COL_GOAL_WEIGHT) != -1) {
                 int goalWeightIndex = cursor.getColumnIndexOrThrow(COL_GOAL_WEIGHT);
                 goalWeight = cursor.getFloat(goalWeightIndex);
             }
-            Profile profile = new Profile(name, age, gender, currWeight, goalWeight);
-            return profile;
+            else return null;
+
+            return new Profile(name, age, gender, currWeight, goalWeight);
         }
         else return null;
     }
@@ -95,30 +126,43 @@ public class ProfileDAO extends AbstractDAO implements IProfileSchema {
         String goalWeight = "";
 
         if (cursor != null) {
+            cursor.moveToFirst();
             if (cursor.getColumnIndex(COL_PID) != -1) {
                 int idIndex = cursor.getColumnIndexOrThrow(COL_PID);
                 id = String.valueOf(cursor.getInt(idIndex));
             }
+            else return null;
+
             if (cursor.getColumnIndex(COL_PNAME) != -1) {
                 int nameIndex = cursor.getColumnIndexOrThrow(COL_PNAME);
                 name = cursor.getString(nameIndex);
             }
+            else return null;
+
             if (cursor.getColumnIndex(COL_AGE) != -1) {
                 int ageIndex = cursor.getColumnIndexOrThrow(COL_AGE);
                 age = String.valueOf(cursor.getInt(ageIndex));
             }
+            else return null;
+
             if (cursor.getColumnIndex(COL_GENDER) != -1) {
                 int genderIndex = cursor.getColumnIndexOrThrow(COL_GENDER);
                 gender = cursor.getString(genderIndex);
             }
+            else return null;
+
             if (cursor.getColumnIndex(COL_CURRENT_WEIGHT) != -1) {
                 int currWeightIndex = cursor.getColumnIndexOrThrow(COL_CURRENT_WEIGHT);
                 currWeight = String.valueOf(cursor.getFloat(currWeightIndex));
             }
+            else return null;
+
             if (cursor.getColumnIndex(COL_GOAL_WEIGHT) != -1) {
                 int goalWeightIndex = cursor.getColumnIndexOrThrow(COL_GOAL_WEIGHT);
                 goalWeight = String.valueOf(cursor.getFloat(goalWeightIndex));
             }
+            else return null;
+
             return new String[] {id, name, age, gender, currWeight, goalWeight};
         }
         else return null;

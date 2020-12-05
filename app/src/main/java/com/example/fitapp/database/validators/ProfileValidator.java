@@ -12,8 +12,13 @@ public class ProfileValidator implements Validator<Profile> {
     public void validate(Profile profile) {
         if (profile.getName().length() < MIN_LENGTH_NAME || profile.getName().length() > MAX_LENGTH_NAME) {
             throw new IllegalArgumentException("The name most be between " + MIN_LENGTH_NAME + " and " +
-                    MAX_LENGTH_NAME + " characters!");
+                    MAX_LENGTH_NAME + " characters");
         }
-        if (profile.getAge() < MIN_AGE)
+        if (profile.getAge() < MIN_AGE) {
+            throw new IllegalArgumentException("The age must be greater than " + MIN_AGE);
+        }
+        if (profile.getCurrWeight() < MIN_WEIGHT || profile.getGoalWeight() < 5) {
+            throw new IllegalArgumentException("The weight must be greater than " + MIN_WEIGHT);
+        }
     }
 }

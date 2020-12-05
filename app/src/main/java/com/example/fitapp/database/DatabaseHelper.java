@@ -22,11 +22,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
+        profileDAO = new ProfileDAO(this.getWritableDatabase());
+        exerciseDAO = new ExerciseDAO(this.getWritableDatabase());
+        runDAO = new RunDAO(this.getWritableDatabase());
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(IProfileSchema.CREATE_TABLE);
+        db.execSQL(IProfileSchema.CREATE_TABLE_PROFILE);
         db.execSQL(IExerciseSchema.CREATE_TABLE_EXERCISE);
         db.execSQL(IRunSchema.CREATE_TABLE_RUN);
 
@@ -54,6 +57,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean editProfile(Profile oldProfile, Profile newProfile) {
         Log.d(DATABASE_NAME, "editProfile: " + oldProfile.toString() + " to " + newProfile.toString());
         return profileDAO.editProfile(oldProfile, newProfile);
+    }
+
+    public Profile getLastProfile() {
+        return profileDAO.getLastProfile();
+    }
+
+    public boolean isEmptyProfileTable() {
+        boolean isEmpty = profileDAO.isTableEmpty();
+        Log.d(DATABASE_NAME, "isEmptyProfileTable: " + isEmpty);
+        return isEmpty;
     }
 
     public boolean addExercise(Exercise exercise) {
