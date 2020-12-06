@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.example.fitapp.database.schemas.IProfileSchema;
 import com.example.fitapp.model.Profile;
@@ -34,28 +33,25 @@ public class ProfileDAO extends AbstractDAO implements IProfileSchema {
         Cursor idCursor = getProfileID(oldProfile);
         String id = "";
 
-        if (idCursor != null) {
-            idCursor.moveToFirst();
+        if (idCursor.moveToNext()) {
             if (idCursor.getColumnIndex(COL_PID) != -1) {
                 int idIndex = idCursor.getColumnIndexOrThrow(COL_PID);
                 id = String.valueOf(idCursor.getInt(idIndex));
+                ContentValues contentValues = createContentValues(newProfile);
+                return super.update(TABLE_PROFILE, contentValues, COL_PID + " = ?", new String[]{id}) > 0;
             }
         }
 
-        Log.d("editProfile", "id: " + id);
-        if (!id.equals("")) {
-            ContentValues contentValues = createContentValues(newProfile);
-            return super.update(TABLE_PROFILE, contentValues, COL_PID + " = ?", new String[] {id}) > 0;
-        }
         return false;
     }
 
     public Cursor getProfileID(Profile profile) {
-        String selection = COL_PNAME + " =? AND " + COL_AGE + " =? AND " + COL_GENDER + " =? AND " +
-                COL_CURRENT_WEIGHT + " =? AND " + COL_GOAL_WEIGHT + " =?";
+        String selection = COL_PNAME + " = ? AND " + COL_AGE + " = ? AND " + COL_GENDER + " = ? AND " +
+                COL_CURRENT_WEIGHT + " = ? AND " + COL_GOAL_WEIGHT + " = ?";
         String[] selectionArgs = new String[] {profile.getName(), String.valueOf(profile.getAge()),
                 profile.getGender(), String.valueOf(profile.getCurrWeight()),
                 String.valueOf(profile.getGoalWeight())};
+
         return super.db.query(TABLE_PROFILE, new String[] {COL_PID}, selection, selectionArgs,
                 null, null, null);
     }

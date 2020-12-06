@@ -14,7 +14,7 @@ public class Profile {
     public Profile(String name, int age, String gender, float currWeight, float goalWeight) {
         this.name = name;
         this.age = age;
-        if (gender.equals("Male")) {
+        if (gender.equals("MALE")) {
             this.gender = Gender.MALE;
         }
         else {
