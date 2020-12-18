@@ -19,4 +19,8 @@
     <string name="title_activity_run">Map</string>
     <string name="button_startRun">START RUN</string>
     <string name="button_stopRun">STOP RUN</string>
+    <string name="text_createexercise">CREATE EXERCISE</string>
+    <string name="textinfo_sets">Sets</string>
+    <string name="textinfo_reps">Repetitions</string>
+    <string name="textinfo_weight">Weight</string>
 </resources>

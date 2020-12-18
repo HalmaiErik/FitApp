@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.fitapp.database.schemas.IExerciseSchema;
 import com.example.fitapp.model.Exercise;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ExerciseDAO extends AbstractDAO implements IExerciseSchema {
     public ExerciseDAO(SQLiteDatabase db) {
         super(db);
@@ -29,25 +32,37 @@ public class ExerciseDAO extends AbstractDAO implements IExerciseSchema {
     }
 
     public boolean editExercise(Exercise oldExercise, Exercise newExercise) {
-        Cursor cursorId = getExerciseID(oldExercise);
-        String[] data = cursorToData(cursorId);
-        if (data != null) {
-            if (!data[0].equals("")) {
+        Cursor idCursor = getExerciseID(oldExercise);
+        String id = "";
+
+        if (idCursor.moveToNext()) {
+            if (idCursor.getColumnIndex(COL_ID) != -1) {
+                int idIndex = idCursor.getColumnIndexOrThrow(COL_ID);
+                id = String.valueOf(idCursor.getInt(idIndex));
+                idCursor.close();
                 ContentValues values = createContentValues(newExercise);
-                return super.update(TABLE_EXERCISE, values, COL_ID, new String[] {data[0]}) > 0;
+                return super.update(TABLE_EXERCISE, values, COL_ID + " = ?", new String[]{id}) > 0;
             }
         }
+        idCursor.close();
+
         return false;
     }
 
     public boolean deleteExercise(Exercise exercise) {
-        Cursor cursorId = getExerciseID(exercise);
-        String[] data = cursorToData(cursorId);
-        if (data != null) {
-            if (!data[0].equals("")) {
-                return super.delete(TABLE_EXERCISE, COL_ID, new String[] {data[0]}) > 0;
+        Cursor idCursor = getExerciseID(exercise);
+        String id = "";
+
+        if (idCursor.moveToNext()) {
+            if (idCursor.getColumnIndex(COL_ID) != -1) {
+                int idIndex = idCursor.getColumnIndexOrThrow(COL_ID);
+                id = String.valueOf(idCursor.getInt(idIndex));
+                idCursor.close();
+                return super.delete(TABLE_EXERCISE, COL_ID + " = ?", new String[]{id}) > 0;
             }
         }
+        idCursor.close();
+
         return false;
     }
 
@@ -59,6 +74,24 @@ public class ExerciseDAO extends AbstractDAO implements IExerciseSchema {
                 String.valueOf(exercise.getFkProfile())};
         return super.db.query(TABLE_EXERCISE, new String[] {COL_ID}, selection, selectionArgs,
                 null, null, null);
+    }
+
+    public List<Exercise> getAllExercises() {
+        List<Exercise> exerciseList = new ArrayList<Exercise>();
+        Cursor cursor = super.db.query(TABLE_EXERCISE, EXERCISE_COLS, null, null,
+                COL_ID, null, COL_ID);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                Exercise exercise = cursorToEntity(cursor);
+                exerciseList.add(exercise);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+
+        return exerciseList;
     }
 
     @Override

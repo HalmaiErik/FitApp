@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.CreateExerciseActivity">
+
+    <Button
+        android:id="@+id/button_goBack"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="330dp"
+        android:layout_marginRight="330dp"
+        android:hint="@string/button_goBack"
+        android:onClick="workoutMenu"
+        android:textColorHint="@color/main_col"
+        android:textSize="14sp"
+        app:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_createExercise"
+        android:layout_width="wrap_content"
+        android:layout_height="37dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="190dp"
+        android:layout_marginRight="190dp"
+        android:fontFamily="sans-serif-condensed"
+        android:hint="@string/text_createexercise"
+        android:textColorHint="@color/main_col"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_goBack" />
+
+    <TextView
+        android:id="@+id/textinfo_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="@string/textinfo_name"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/intext_name"
+        app:layout_constraintTop_toBottomOf="@+id/text_createExercise" />
+
+    <EditText
+        android:id="@+id/intext_name"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:cursorVisible="true"
+        android:inputType="textPersonName|text"
+        android:textColor="@color/main_col"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textinfo_name" />
+
+    <TextView
+        android:id="@+id/textinfo_sets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/textinfo_sets"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/intext_sets"
+        app:layout_constraintTop_toBottomOf="@+id/intext_name" />
+
+    <EditText
+        android:id="@+id/intext_sets"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:inputType="number"
+        android:textColor="@color/main_col"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textinfo_sets" />
+
+    <TextView
+        android:id="@+id/textinfo_reps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/textinfo_reps"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/intext_reps"
+        app:layout_constraintTop_toBottomOf="@+id/intext_sets" />
+
+    <EditText
+        android:id="@+id/intext_reps"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:inputType="number"
+        android:textColor="@color/main_col"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textinfo_reps" />
+
+    <TextView
+        android:id="@+id/textinfo_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="@string/textinfo_weight"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/intext_weight"
+        app:layout_constraintTop_toBottomOf="@+id/intext_reps" />
+
+    <EditText
+        android:id="@+id/intext_weight"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:inputType="numberSigned|numberDecimal"
+        android:textColor="@color/main_col"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textinfo_weight" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

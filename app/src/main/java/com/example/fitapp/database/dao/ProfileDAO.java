@@ -37,10 +37,12 @@ public class ProfileDAO extends AbstractDAO implements IProfileSchema {
             if (idCursor.getColumnIndex(COL_PID) != -1) {
                 int idIndex = idCursor.getColumnIndexOrThrow(COL_PID);
                 id = String.valueOf(idCursor.getInt(idIndex));
+                idCursor.close();
                 ContentValues contentValues = createContentValues(newProfile);
                 return super.update(TABLE_PROFILE, contentValues, COL_PID + " = ?", new String[]{id}) > 0;
             }
         }
+        idCursor.close();
 
         return false;
     }
