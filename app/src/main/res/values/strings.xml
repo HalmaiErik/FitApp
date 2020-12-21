@@ -23,4 +23,5 @@
     <string name="textinfo_sets">Sets</string>
     <string name="textinfo_reps">Repetitions</string>
     <string name="textinfo_weight">Weight</string>
+    <string name="text_editexercise">EDIT EXERCISE</string>
 </resources>

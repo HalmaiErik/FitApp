@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.fitapp.R;
@@ -14,7 +13,7 @@ import com.example.fitapp.database.DatabaseHelper;
 import com.example.fitapp.database.validators.ExerciseValidator;
 import com.example.fitapp.model.Exercise;
 
-public class CreateExerciseActivity extends AppCompatActivity {
+public class EditExerciseActivity extends AppCompatActivity {
     DatabaseHelper databaseHelper;
     private EditText nameText;
     private EditText setsText;
@@ -26,15 +25,10 @@ public class CreateExerciseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_exercise);
+        setContentView(R.layout.activity_edit_exercise);
 
         databaseHelper = new DatabaseHelper(getApplicationContext());
         lastProfileId = databaseHelper.getLastProfileId();
-        if (lastProfileId < 0) {
-            toastMessage("You need to create your profile first");
-            Intent intent = new Intent(this, EditProfileActivity.class);
-            startActivity(intent);
-        }
         initViews();
         validator = new ExerciseValidator();
     }
@@ -53,7 +47,7 @@ public class CreateExerciseActivity extends AppCompatActivity {
                     Float.parseFloat(data[3]), lastProfileId);
             try {
                 validator.validate(exercise);
-                if (databaseHelper.addExercise(exercise)) {
+                if (databaseHelper.editExercise(exercise)) {
                     toastMessage("Exercise created");
                     workoutMenu(view);
                 }

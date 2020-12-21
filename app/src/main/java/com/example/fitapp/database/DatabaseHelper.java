@@ -14,6 +14,8 @@ import com.example.fitapp.database.schemas.IRunSchema;
 import com.example.fitapp.model.Exercise;
 import com.example.fitapp.model.Profile;
 
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "fitapp_database";
     private static ProfileDAO profileDAO;
@@ -63,6 +65,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return profileDAO.getLastProfile();
     }
 
+    public int getLastProfileId() {return profileDAO.getLastProfileID();}
+
     public boolean isEmptyProfileTable() {
         boolean isEmpty = profileDAO.isTableEmpty();
         Log.d(DATABASE_NAME, "isEmptyProfileTable: " + isEmpty);
@@ -82,5 +86,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean deleteExercise(Exercise exercise) {
         Log.d(DATABASE_NAME, "deleteExercise: " + exercise.toString() + " from " + IExerciseSchema.TABLE_EXERCISE);
         return exerciseDAO.deleteExercise(exercise);
+    }
+
+    public List<Exercise> getAllExercises() {
+        List<Exercise> exercises = exerciseDAO.getAllExercises();
+        Log.d(DATABASE_NAME, "getAllExercises: count = " + exercises.size());
+        return exercises;
     }
 }

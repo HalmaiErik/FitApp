@@ -25,7 +25,7 @@
         app:layout_constraintTop_toBottomOf="@+id/button_goBack" />
 
     <EditText
-        android:id="@+id/intext_name"
+        android:id="@+id/intext_nameEx"
         android:layout_width="0dp"
         android:layout_height="38dp"
         android:layout_marginStart="48dp"
@@ -150,7 +150,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="105dp"
+        android:layout_marginTop="115dp"
         android:layout_marginEnd="330dp"
         android:layout_marginRight="330dp"
         android:hint="@string/button_goBack"
@@ -169,7 +169,7 @@
         android:layout_marginTop="12dp"
         android:hint="@string/textinfo_name"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/intext_name"
+        app:layout_constraintStart_toStartOf="@+id/intext_nameEx"
         app:layout_constraintTop_toBottomOf="@+id/text_editprofile" />
 
     <TextView
@@ -180,7 +180,7 @@
         android:hint="@string/textinfo_age"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@+id/intext_age"
-        app:layout_constraintTop_toBottomOf="@+id/intext_name" />
+        app:layout_constraintTop_toBottomOf="@+id/intext_nameEx" />
 
     <TextView
         android:id="@+id/textinfo_currWeight"

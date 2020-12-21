@@ -37,7 +37,7 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        databaseHelper = new DatabaseHelper(this);
+        databaseHelper = new DatabaseHelper(getApplicationContext());
         emptyProfile = databaseHelper.isEmptyProfileTable();
         initViews();
 
@@ -50,7 +50,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public void initViews() {
-        nameText = (EditText) findViewById(R.id.intext_name);
+        nameText = (EditText) findViewById(R.id.intext_nameEx);
         ageText = (EditText) findViewById(R.id.intext_age);
         genderGroup = (RadioGroup) findViewById(R.id.radgroup_gender);
         int selectedGenderID = genderGroup.getCheckedRadioButtonId();
@@ -107,8 +107,10 @@ public class EditProfileActivity extends AppCompatActivity {
                     toastMessage("Profile created");
                     mainMenu(view);
                 }
-            } catch (IllegalArgumentException | CursorIndexOutOfBoundsException e) {
+            } catch (IllegalArgumentException e) {
                 toastMessage(e.getMessage());
+            } catch (CursorIndexOutOfBoundsException e) {
+                Log.e("EditProfile: ", e.getMessage());
             }
         }
         else {
