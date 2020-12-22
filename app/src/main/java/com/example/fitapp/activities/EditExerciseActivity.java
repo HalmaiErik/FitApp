@@ -3,7 +3,9 @@ package com.example.fitapp.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -19,8 +21,9 @@ public class EditExerciseActivity extends AppCompatActivity {
     private EditText setsText;
     private EditText repsText;
     private EditText weightText;
-    private int lastProfileId;
     private ExerciseValidator validator;
+    private Exercise oldExercise;
+    private int lastProfileId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +31,10 @@ public class EditExerciseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_exercise);
 
         databaseHelper = new DatabaseHelper(getApplicationContext());
-        lastProfileId = databaseHelper.getLastProfileId();
+        checkProfile();
         initViews();
+        oldExercise = (Exercise) getIntent().getSerializableExtra("Exercise");
+        loadExercise(oldExercise);
         validator = new ExerciseValidator();
     }
 
@@ -40,15 +45,33 @@ public class EditExerciseActivity extends AppCompatActivity {
         weightText = findViewById(R.id.intext_weight);
     }
 
+    private void loadExercise(Exercise exercise) {
+        nameText.setText(exercise.getName());
+        setsText.setText(String.valueOf(exercise.getSets()));
+        repsText.setText(String.valueOf(exercise.getReps()));
+        weightText.setText(String.valueOf(exercise.getWeight()));
+    }
+
+    private void checkProfile() {
+        if (!databaseHelper.isEmptyProfileTable()) {
+            lastProfileId = databaseHelper.getLastProfileId();
+        }
+        else {
+            toastMessage("You need to create your profile first");
+            Intent intent = new Intent(this, EditProfileActivity.class);
+            startActivity(intent);
+        }
+    }
+
     public void save(View view) {
         String[] data = textToData();
         if (!data[0].equals("") && !data[1].equals("") && !data[2].equals("") && !data[3].equals("")) {
-            Exercise exercise = new Exercise(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]),
+            Exercise newExercise = new Exercise(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]),
                     Float.parseFloat(data[3]), lastProfileId);
             try {
-                validator.validate(exercise);
-                if (databaseHelper.editExercise(exercise)) {
-                    toastMessage("Exercise created");
+                validator.validate(newExercise);
+                if (databaseHelper.editExercise(oldExercise, newExercise)) {
+                    toastMessage("Exercise updated");
                     workoutMenu(view);
                 }
                 else {
@@ -56,6 +79,8 @@ public class EditExerciseActivity extends AppCompatActivity {
                 }
             } catch (IllegalArgumentException e) {
                 toastMessage(e.getMessage());
+            } catch (CursorIndexOutOfBoundsException e) {
+                Log.e("EditExercise", e.getMessage());
             }
         }
     }

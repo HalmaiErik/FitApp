@@ -29,12 +29,7 @@ public class CreateExerciseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_exercise);
 
         databaseHelper = new DatabaseHelper(getApplicationContext());
-        lastProfileId = databaseHelper.getLastProfileId();
-        if (lastProfileId < 0) {
-            toastMessage("You need to create your profile first");
-            Intent intent = new Intent(this, EditProfileActivity.class);
-            startActivity(intent);
-        }
+        checkProfile();
         initViews();
         validator = new ExerciseValidator();
     }
@@ -44,6 +39,17 @@ public class CreateExerciseActivity extends AppCompatActivity {
         setsText = findViewById(R.id.intext_sets);
         repsText = findViewById(R.id.intext_reps);
         weightText = findViewById(R.id.intext_weight);
+    }
+
+    private void checkProfile() {
+        if (!databaseHelper.isEmptyProfileTable()) {
+            lastProfileId = databaseHelper.getLastProfileId();
+        }
+        else {
+            toastMessage("You need to create your profile first");
+            Intent intent = new Intent(this, EditProfileActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void save(View view) {

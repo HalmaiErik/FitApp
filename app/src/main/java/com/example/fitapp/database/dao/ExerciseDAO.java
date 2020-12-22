@@ -67,13 +67,19 @@ public class ExerciseDAO extends AbstractDAO implements IExerciseSchema {
     }
 
     public Cursor getExerciseID(Exercise exercise) {
-        String selection = COL_ENAME + " =? AND " + COL_REPS + " =? AND " + COL_SETS + " =? AND" +
-                COL_WEIGHT + " =? AND " + COL_FK_PROFILE + " =?";
+        String selection = COL_ENAME + " = ? AND " + COL_SETS + " = ? AND " + COL_REPS + " = ? AND " +
+                COL_WEIGHT + " = ? AND " + COL_FK_PROFILE + " = ?";
         String[] selectionArgs = new String[] {exercise.getName(), String.valueOf(exercise.getSets()),
                 String.valueOf(exercise.getReps()), String.valueOf(exercise.getWeight()),
                 String.valueOf(exercise.getFkProfile())};
         return super.db.query(TABLE_EXERCISE, new String[] {COL_ID}, selection, selectionArgs,
                 null, null, null);
+    }
+
+    public Exercise getExerciseWithName(String name) {
+        Cursor cursor = super.db.query(TABLE_EXERCISE, EXERCISE_COLS, COL_ENAME, new String[] {name},
+                null, null, null);
+        return cursorToEntity(cursor);
     }
 
     public List<Exercise> getAllExercises() {
