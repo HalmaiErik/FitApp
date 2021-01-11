@@ -7,6 +7,9 @@
          location permissions for the "MyLocation" functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -31,7 +34,8 @@
 
         <activity
             android:name=".activities.RunActivity"
-            android:label="@string/title_activity_run" />
+            android:label="@string/title_activity_run"
+            android:launchMode="singleTask" />
         <activity android:name=".activities.WorkoutActivity" />
         <activity android:name=".activities.EditProfileActivity" />
         <activity android:name=".activities.MainActivity">
