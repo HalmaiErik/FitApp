@@ -39,10 +39,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.example.fitapp.R;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RunActivity extends FragmentActivity implements OnMapReadyCallback {
     private static final String TAG = RunActivity.class.getSimpleName();
@@ -57,6 +63,8 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
     private static final String KEY_LOCATION = "location";
 
     private GoogleMap mMap;
+    private Polyline polyline;
+    private List<LatLng> points;
     private CameraPosition cameraPosition;
 
     boolean locationPermissionGranted;
@@ -67,7 +75,8 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
 
     private Location startLocation;
     private Location lastKnownLocation;
-    private boolean firstLocation;
+    private boolean runStarted;
+    private boolean firstScan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +91,9 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
         setContentView(R.layout.activity_run);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         createLocationRequest();
-        firstLocation = false;
+        runStarted = false;
+        firstScan = false;
+        points = new ArrayList<LatLng>();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -129,6 +140,10 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
         createLocationCallback();
         // Start location updates
         checkLocationSettings();
+
+        polyline = mMap.addPolyline(new PolylineOptions()
+            .startCap(new RoundCap())
+            );
     }
 
     @Override
@@ -145,10 +160,11 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         locationPermissionGranted = false;
-        if (requestCode == PERMISSION_REQUEST_ACCESS_FINE_LOCATION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                locationPermissionGranted = true;
-                checkLocationSettings();
+        switch (requestCode) {
+            case PERMISSION_REQUEST_ACCESS_FINE_LOCATION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    locationPermissionGranted = true;
+                }
             }
         }
         updateLocationUI();
@@ -179,7 +195,6 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
                 mMap.setMyLocationEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
                 lastKnownLocation = null;
-                getLocationPermission();
             }
         } catch (SecurityException e) {
             Log.e(TAG, "Exception: %s", e);
@@ -189,8 +204,8 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
     /** Creates and sets the parameters of the location request */
     protected void createLocationRequest() {
         locationRequest = LocationRequest.create();
-        locationRequest.setInterval(5000);
-        locationRequest.setFastestInterval(2000);
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(5000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
@@ -204,7 +219,20 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
                 }
                 for (Location location : locationResult.getLocations()) {
                     lastKnownLocation = location;
-                    Log.d(TAG, lastKnownLocation.getLatitude() + " " + lastKnownLocation.getLongitude());
+
+                    if (runStarted) {
+                        if (firstScan) {
+                            startLocation = lastKnownLocation;
+                            Log.d(TAG, "Start location: " +
+                                    startLocation.getLatitude() + " " + startLocation.getLongitude());
+                            firstScan = false;
+                        }
+
+                        points.add(new LatLng(lastKnownLocation.getLatitude(),
+                                lastKnownLocation.getLongitude()));
+                        polyline.setPoints(points);
+                    }
+
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(lastKnownLocation.getLatitude(),
                                     lastKnownLocation.getLongitude()), DEFAULT_ZOOM
@@ -214,6 +242,9 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
         };
     }
 
+    /** Checks location settings and starts location updates if satisfied, or it resolves the
+     * exception otherwise
+     */
     private void checkLocationSettings() {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(locationRequest);
@@ -226,6 +257,7 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
                 startLocationUpdates();
             }
         });
+
         task.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -243,6 +275,7 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
         });
     }
 
+    /** Starts the location updates */
     private void startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -252,13 +285,15 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
         }
     }
 
+    /** Stops the location updates */
     private void stopLocationUpdates() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
     }
 
     /** Called when the user taps the Start run button */
     public void startRun(View view) {
-        firstLocation = true;
+        runStarted = true;
+        firstScan = true;
     }
 
     /**
