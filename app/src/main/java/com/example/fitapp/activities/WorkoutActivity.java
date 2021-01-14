@@ -39,6 +39,7 @@ public class WorkoutActivity extends AppCompatActivity {
         loadExercises();
     }
 
+    /** Initializes the view objects */
     public void initViews() {
         allExercises = findViewById(R.id.linearAllExercises);
         currExercises = findViewById(R.id.linearCurrWorkout);

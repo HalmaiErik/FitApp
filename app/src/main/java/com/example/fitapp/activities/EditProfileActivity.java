@@ -49,6 +49,7 @@ public class EditProfileActivity extends AppCompatActivity {
         validator = new ProfileValidator();
     }
 
+    /** Initializes the view objects */
     public void initViews() {
         nameText = (EditText) findViewById(R.id.intext_nameEx);
         ageText = (EditText) findViewById(R.id.intext_age);
@@ -59,6 +60,7 @@ public class EditProfileActivity extends AppCompatActivity {
         goalWeightText = (EditText) findViewById(R.id.intext_goalweight);
     }
 
+    /** Loads the profile to be edited */
     public void loadLastProfile(Profile profile) {
         if (profile != null) {
             nameText.setText(profile.getName());
@@ -118,6 +120,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
+    /** Gets the data from the TextView & RadioButton objects */
     public String[] textToData() {
         int selectedGenderID = genderGroup.getCheckedRadioButtonId();
         selectedGender = (RadioButton) findViewById(selectedGenderID);

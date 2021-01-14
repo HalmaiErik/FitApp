@@ -24,6 +24,4 @@ public abstract class AbstractDAO {
     }
 
     protected abstract <T> T cursorToEntity(Cursor cursor);
-
-    protected abstract String[] cursorToData(Cursor cursor);
 }

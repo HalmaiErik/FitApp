@@ -76,12 +76,6 @@ public class ExerciseDAO extends AbstractDAO implements IExerciseSchema {
                 null, null, null);
     }
 
-    public Exercise getExerciseWithName(String name) {
-        Cursor cursor = super.db.query(TABLE_EXERCISE, EXERCISE_COLS, COL_ENAME, new String[] {name},
-                null, null, null);
-        return cursorToEntity(cursor);
-    }
-
     public List<Exercise> getAllExercises() {
         List<Exercise> exerciseList = new ArrayList<Exercise>();
         Cursor cursor = super.db.query(TABLE_EXERCISE, EXERCISE_COLS, null, null,
@@ -131,45 +125,6 @@ public class ExerciseDAO extends AbstractDAO implements IExerciseSchema {
             }
             Exercise exercise = new Exercise(name, sets, reps, weight, fkProfile);
             return exercise;
-        }
-        else return null;
-    }
-
-    @Override
-    protected String[] cursorToData(Cursor cursor) {
-        String id = "";
-        String name = "";
-        String sets = "";
-        String reps = "";
-        String weight = "";
-        String fkProfile = "";
-
-        if (cursor != null) {
-            if (cursor.getColumnIndex(COL_ID) != -1) {
-                int idIndex = cursor.getColumnIndexOrThrow(COL_ID);
-                id = String.valueOf(cursor.getInt(idIndex));
-            }
-            if (cursor.getColumnIndex(COL_ENAME) != -1) {
-                int nameIndex = cursor.getColumnIndexOrThrow(COL_ENAME);
-                name = cursor.getString(nameIndex);
-            }
-            if (cursor.getColumnIndex(COL_SETS) != -1) {
-                int setsIndex = cursor.getColumnIndexOrThrow(COL_SETS);
-                sets = String.valueOf(cursor.getInt(setsIndex));
-            }
-            if (cursor.getColumnIndex(COL_REPS) != -1) {
-                int repsIndex = cursor.getColumnIndexOrThrow(COL_REPS);
-                reps = String.valueOf(cursor.getInt(repsIndex));
-            }
-            if (cursor.getColumnIndex(COL_WEIGHT) != -1) {
-                int weightIndex = cursor.getColumnIndexOrThrow(COL_WEIGHT);
-                weight = String.valueOf(cursor.getFloat(weightIndex));
-            }
-            if (cursor.getColumnIndex(COL_FK_PROFILE) != -1) {
-                int fkProfileIndex = cursor.getColumnIndexOrThrow(COL_FK_PROFILE);
-                fkProfile = String.valueOf(cursor.getInt(fkProfileIndex));
-            }
-            return new String[] {id, name, sets, reps, weight, fkProfile};
         }
         else return null;
     }

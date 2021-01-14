@@ -34,6 +34,7 @@ public class CreateExerciseActivity extends AppCompatActivity {
         validator = new ExerciseValidator();
     }
 
+    /** Initializes the view objects */
     private void initViews() {
         nameText = findViewById(R.id.intext_nameEx);
         setsText = findViewById(R.id.intext_sets);
@@ -41,6 +42,7 @@ public class CreateExerciseActivity extends AppCompatActivity {
         weightText = findViewById(R.id.intext_weight);
     }
 
+    /** Checks if a profile has been created or not, if it was, the id of the profile is set */
     private void checkProfile() {
         if (!databaseHelper.isEmptyProfileTable()) {
             lastProfileId = databaseHelper.getLastProfileId();
@@ -52,6 +54,7 @@ public class CreateExerciseActivity extends AppCompatActivity {
         }
     }
 
+    /** Called when the user taps the save button */
     public void save(View view) {
         String[] data = textToData();
         if (!data[0].equals("") && !data[1].equals("") && !data[2].equals("") && !data[3].equals("")) {
@@ -78,6 +81,7 @@ public class CreateExerciseActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /** Gets the data from the TextView objects */
     public String[] textToData() {
         return new String[]{nameText.getText().toString(), setsText.getText().toString(),
                 repsText.getText().toString(), weightText.getText().toString()};
