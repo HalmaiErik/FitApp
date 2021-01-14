@@ -7,10 +7,8 @@ import android.util.Log;
 
 import com.example.fitapp.database.dao.ExerciseDAO;
 import com.example.fitapp.database.dao.ProfileDAO;
-import com.example.fitapp.database.dao.RunDAO;
 import com.example.fitapp.database.schemas.IExerciseSchema;
 import com.example.fitapp.database.schemas.IProfileSchema;
-import com.example.fitapp.database.schemas.IRunSchema;
 import com.example.fitapp.model.Exercise;
 import com.example.fitapp.model.Profile;
 
@@ -20,24 +18,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "fitapp_database";
     private static ProfileDAO profileDAO;
     private static ExerciseDAO exerciseDAO;
-    private static RunDAO runDAO;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
         profileDAO = new ProfileDAO(this.getWritableDatabase());
         exerciseDAO = new ExerciseDAO(this.getWritableDatabase());
-        runDAO = new RunDAO(this.getWritableDatabase());
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(IProfileSchema.CREATE_TABLE_PROFILE);
         db.execSQL(IExerciseSchema.CREATE_TABLE_EXERCISE);
-        db.execSQL(IRunSchema.CREATE_TABLE_RUN);
 
         profileDAO = new ProfileDAO(db);
         exerciseDAO = new ExerciseDAO(db);
-        runDAO = new RunDAO(db);
     }
 
     @Override
@@ -47,7 +41,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + newVersion + " which destroys all old data");
         db.execSQL("DROP TABLE IF EXISTS " + IProfileSchema.TABLE_PROFILE);
         db.execSQL("DROP TABLE IF EXISTS " + IExerciseSchema.TABLE_EXERCISE);
-        db.execSQL("DROP TABLE IF EXISTS " + IRunSchema.TABLE_RUN);
         onCreate(db);
     }
 
@@ -66,6 +59,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public int getLastProfileId() {return profileDAO.getLastProfileID();}
+
+    public float getProfileWeight() {return profileDAO.getProfileWeight();}
 
     public boolean isEmptyProfileTable() {
         boolean isEmpty = profileDAO.isTableEmpty();

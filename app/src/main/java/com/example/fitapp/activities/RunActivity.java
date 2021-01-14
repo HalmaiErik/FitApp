@@ -12,13 +12,17 @@ import android.location.Location;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Chronometer;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fitapp.database.DatabaseHelper;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -35,28 +39,23 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.example.fitapp.R;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RunActivity extends FragmentActivity implements OnMapReadyCallback {
     private static final String TAG = RunActivity.class.getSimpleName();
     private static final int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static final int DEFAULT_ZOOM = 15;
-
-    // Default location when location permission isn't granted (Sydney, Australia)
-    private final LatLng defaultLocation = new LatLng(-34, 151);
+    private static final int DEFAULT_ZOOM = 18;
 
     // Values for storing activity state
     private static final String KEY_CAMERA_POSITION = "camera_position";
@@ -78,6 +77,19 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
     private boolean runStarted;
     private boolean firstScan;
 
+    private Button button;
+    private TextView distanceText;
+    private TextView paceText;
+    private TextView caloriesText;
+    private Chronometer chronometer;
+
+    private Float distance;
+    private Float pace;
+    private int calories;
+
+    private DatabaseHelper databaseHelper;
+    private float weight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,17 +100,31 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
             cameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
 
+        databaseHelper = new DatabaseHelper(getApplicationContext());
+
         setContentView(R.layout.activity_run);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         createLocationRequest();
         runStarted = false;
         firstScan = false;
         points = new ArrayList<LatLng>();
+        initViews();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!databaseHelper.isEmptyProfileTable()) {
+            weight = databaseHelper.getProfileWeight();
+        }
+        else {
+            weight = 0;
+        }
     }
 
     @Override
@@ -170,6 +196,44 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
         updateLocationUI();
     }
 
+    /** Initializes the view objects and sets the onClick listener for the start/stop run button */
+    private void initViews() {
+        button = findViewById(R.id.button_actionRun);
+        distanceText = findViewById(R.id.distance_text);
+        paceText = findViewById(R.id.pace_text);
+        caloriesText = findViewById(R.id.calories_text);
+        chronometer = findViewById(R.id.chronometer);
+
+        button.setTag(0);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (weight != 0) {
+                    final int status = (Integer) v.getTag();
+                    if (status == 0) {
+                        button.setText("STOP RUN");
+                        v.setTag(1);
+                        runStarted = true;
+                        firstScan = true;
+                        points = new ArrayList<LatLng>();
+                        chronometer.setBase(SystemClock.elapsedRealtime());
+                        chronometer.start();
+                    } else {
+                        button.setText("START RUN");
+                        v.setTag(0);
+                        runStarted = false;
+                        chronometer.stop();
+                    }
+                }
+                else {
+                    toastMessage("You need to create your profile first");
+                    Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
     /** Location permission */
     private void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
@@ -230,7 +294,19 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
 
                         points.add(new LatLng(lastKnownLocation.getLatitude(),
                                 lastKnownLocation.getLongitude()));
+
                         polyline.setPoints(points);
+                        distance = startLocation.distanceTo(lastKnownLocation);
+                        DecimalFormat decimalFormat = new DecimalFormat("#.#");
+                        distanceText.setText("Distance: " + decimalFormat.format(distance) + " m");
+
+                        long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
+                        pace = distance / (elapsedMillis / 1000);
+                        paceText.setText("Pace: " + decimalFormat.format(pace) + " m/s");
+
+                        float elapsedSeconds = (float) (elapsedMillis / 1000);
+                        calories = (int) (elapsedSeconds * 8 * weight / 2000);
+                        caloriesText.setText("Calories: " + decimalFormat.format(calories) + " kcal");
                     }
 
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
@@ -290,10 +366,11 @@ public class RunActivity extends FragmentActivity implements OnMapReadyCallback 
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
     }
 
-    /** Called when the user taps the Start run button */
-    public void startRun(View view) {
-        runStarted = true;
-        firstScan = true;
+
+    /** Called when the user taps the Back ( < ) button. */
+    public void mainMenu(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     /**

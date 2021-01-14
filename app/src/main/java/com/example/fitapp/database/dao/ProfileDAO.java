@@ -78,6 +78,20 @@ public class ProfileDAO extends AbstractDAO implements IProfileSchema {
         return -1;
     }
 
+    public float getProfileWeight() {
+        Cursor cursor = super.db.query(TABLE_PROFILE, new String[] {COL_CURRENT_WEIGHT}, null, null,
+                null, null, COL_PID + " DESC", "1");
+        if (cursor != null) {
+            cursor.moveToFirst();
+            if (cursor.getColumnIndex(COL_CURRENT_WEIGHT) != -1) {
+                int weightIndex = cursor.getColumnIndexOrThrow(COL_CURRENT_WEIGHT);
+                float weight = cursor.getInt(weightIndex);
+                return weight;
+            }
+        }
+        return -1;
+    }
+
     public boolean isTableEmpty() {
         long rowNumber = DatabaseUtils.queryNumEntries(db, TABLE_PROFILE);
         return rowNumber == 0;

@@ -44,11 +44,19 @@ public class WorkoutActivity extends AppCompatActivity {
         currExercises = findViewById(R.id.linearCurrWorkout);
     }
 
+    /** Called when the user taps the Back ( < ) button. */
+    public void mainMenu(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    /** Called when the user taps the create exercise button */
     public void createExercise(View view) {
         Intent intent = new Intent(this, CreateExerciseActivity.class);
         startActivity(intent);
     }
 
+    /** Called when the user taps the edit exercise button */
     public void editExercise(View view) {
         if (selectedExercise != null) {
             Intent intent = new Intent(this, EditExerciseActivity.class);
@@ -60,6 +68,7 @@ public class WorkoutActivity extends AppCompatActivity {
         }
     }
 
+    /** Called when the user taps the delete exercise button */
     public void deleteExercise(View view) {
         if (selectedExercise != null) {
             try {
@@ -81,6 +90,9 @@ public class WorkoutActivity extends AppCompatActivity {
         }
     }
 
+    /** Loads the exercises from the database into TextView objects and sets their onClick and
+     * onLongClick method
+     */
     private void loadExercises() {
         exercises = databaseHelper.getAllExercises();
         for (Exercise exercise : exercises) {

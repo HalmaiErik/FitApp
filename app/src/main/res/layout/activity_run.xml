@@ -3,25 +3,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".activities.RunActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" />
+    <Button
+        android:id="@+id/button_backToMain"
+        android:layout_width="39dp"
+        android:layout_height="42dp"
+        android:background="@color/white"
+        android:hint="@string/button_goBack"
+        android:onClick="mainMenu"
+        android:textColor="@color/main_col"
+        app:backgroundTint="@color/white" />
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="520dp"
+        android:layout_height="507dp"
         tools:context=".activities.RunActivity" />
 
     <Button
@@ -29,9 +31,55 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/main_col"
-        android:hint="@string/button_startRun"
-        android:onClick="startRun"
+        android:text="START RUN"
+        android:textColor="@color/white"
         android:textColorHint="#FFFFFF"
+        android:textSize="18sp"
         app:backgroundTint="@color/main_col" />
+
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="21sp" />
+
+    <LinearLayout
+        android:id="@+id/info_row2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/distance_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/outline_view"
+            android:gravity="center_horizontal"
+            android:text=" Distance: 0.0 m"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/pace_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/outline_view"
+            android:gravity="center_horizontal"
+            android:text="Pace 0.0 m/s"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/calories_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/outline_view"
+            android:gravity="center_horizontal"
+            android:text="Calories: 0 kcal"
+            android:textSize="16sp" />
+    </LinearLayout>
 
 </LinearLayout>
